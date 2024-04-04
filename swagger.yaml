@@ -70,6 +70,16 @@
                   "error":
                     "type": "string"
                     "example": "Missing required fields"
+        "422":
+          "description": "Unprocessable Entity - Error processing the translation"
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "error":
+                    "type": "string"
+                    "example": "Error processing translation request. The text could not be translated due to [specific reason]."
         "500":
           "description": "Internal Server Error"
           "content":
