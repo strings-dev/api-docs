@@ -59,15 +59,15 @@ components:
         context:
           type: "string"
           description: "Additional context to help with the translation. Optional."
-          example: "Legal document translation"
+          example: "Do you have any safety concerns?"
         text:
           type: "string"
           description: "The text to translate."
-          example: "Hello, world!"
+          example: "No hay suficientes cascos para la tripulación."
         targetLanguage:
           type: "string"
           description: "The target language code (e.g., 'en', 'es')."
-          example: "es"
+          example: "en"
       required:
         - "text"
         - "targetLanguage"
@@ -76,10 +76,10 @@ components:
       properties:
         translatedText:
           type: "string"
-          example: "¡Hola, mundo!"
+          example: "There are not enough helmets for the crew."
         originalLanguage:
           type: "string"
-          example: "en"
+          example: "es"
     UnauthorizedResponse:
       type: "object"
       properties:
