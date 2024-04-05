@@ -1,0 +1,38 @@
+name: Update Docs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install npm packages
+        run: npm install
+
+      - name: Run commands
+        run: |
+          npx snippet-enricher-cli --targets=node_request,node_native,node_axios,node_fetch,go_native,java_unirest,php_curl,python_python3,ruby_native,shell_curl --input=swagger.yaml > openapi-with-examples.json
+          npx @redocly/cli build-docs --output=index.html openapi-with-examples.json
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add openapi-with-examples.json
+          git add index.html
+          git commit -m "Automatically update examples" || exit 0
+          git push
