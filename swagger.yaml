@@ -51,6 +51,52 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
       security:
         - ApiKeyAuth: []
+  /translate/conversation:
+    post:
+      summary: "Translate the next message in a conversation."
+      description: "Translates the next message in a conversation using the context provided by previous messages."
+      operationId: "translateConversationMessage"
+      tags:
+        - "Translation"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationTranslationRequest'
+      responses:
+        '200':
+          description: "The request was successful."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulTranslationResponse'
+        "401":
+          description: "Unauthorized access, invalid or missing API key"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        "400":
+          description: "Missing required fields"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingFieldsResponse'
+        "422":
+          description: "Unprocessable Entity - Error processing the translation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntityResponse'
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+      security:
+        - ApiKeyAuth: []
 components:
   schemas:
     TranslationRequest:
@@ -71,6 +117,41 @@ components:
       required:
         - "text"
         - "targetLanguage"
+    ConversationTranslationRequest:
+      type: "object"
+      required:
+        - "previousMessages"
+        - "nextMessage"
+        - "targetLanguage"
+      properties:
+        previousMessages:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Message'
+        nextMessage:
+          $ref: '#/components/schemas/Message'
+        targetLanguage:
+          type: "string"
+      example:
+        previousMessages:
+          - sender: "user123"
+            text: "Hello how are you?"
+          - sender: "user456"
+            text: "I'm fine thanks! And you?"
+        nextMessage:
+          sender: "user123"
+          text: "Me alegro yo también estoy bien."
+        targetLanguage: "en"
+    Message:
+      type: "object"
+      required:
+        - "sender"
+        - "text"
+      properties:
+        sender:
+          type: "string"
+        text:
+          type: "string"
     SuccessfulTranslationResponse:
       type: "object"
       properties:
