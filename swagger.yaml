@@ -157,7 +157,7 @@ components:
       properties:
         translatedText:
           type: "string"
-          example: "There are not enough helmets for the crew."
+          example: "This is the translated text"
         originalLanguage:
           type: "string"
           example: "es"
