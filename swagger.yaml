@@ -97,6 +97,52 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
       security:
         - ApiKeyAuth: []
+  /translate/conversationWithChatID:
+    post:
+      summary: "Translate Message with Chat ID"
+      description: "Uses a chatID to provide context for translating the next message in a conversation."
+      operationId: "translateMessageWithChatID"
+      tags:
+        - "Translation"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslateRequestWithChatID'
+      responses:
+        '200':
+          description: "Successful translation with context."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulTranslationResponse'
+        "400":
+          description: "Missing required fields"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingFieldsResponse'
+        "401":
+          description: "Unauthorized access, invalid or missing API key"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        "422":
+          description: "Unprocessable Entity - Error processing the translation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntityResponse'
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+      security:
+        - ApiKeyAuth: []
 components:
   schemas:
     TranslationRequest:
@@ -139,6 +185,29 @@ components:
           - sender: "user456"
             text: "I'm fine thanks! And you?"
         nextMessage:
+          sender: "user123"
+          text: "Me alegro yo también estoy bien."
+        targetLanguage: "en"
+    TranslateRequestWithChatID:
+      type: "object"
+      required:
+        - "chatID"
+        - "message"
+        - "targetLanguage"
+      properties:
+        chatID:
+          type: "string"
+          description: "The unique identifier for the conversation."
+          example: "123456789"
+        message:
+          $ref: '#/components/schemas/Message'
+        targetLanguage:
+          type: "string"
+          description: "The target language code."
+          example: "en"
+      example:
+        chatID: "123456789"
+        message:
           sender: "user123"
           text: "Me alegro yo también estoy bien."
         targetLanguage: "en"
