@@ -207,7 +207,7 @@ components:
           example: "en"
       example:
         chatID: "123456789"
-        message:
+        nextMessage:
           sender: "user123"
           text: "Me alegro yo también estoy bien."
         targetLanguage: "en"
